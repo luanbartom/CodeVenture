@@ -1,4 +1,4 @@
-const exercises = [
+const htmlExercises = [
   {
     id: 1,
     lesson: {
@@ -51,4 +51,4 @@ const exercises = [
   },
 ];
 
-export default exercises;
+export default htmlExercises;

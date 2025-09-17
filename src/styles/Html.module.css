@@ -1,0 +1,34 @@
+.container {
+  background: #ffc793; /* verde claro */
+  min-height: 100vh;
+  text-align: center;
+  padding: 20px;
+}
+
+.title {
+  color: #ff6207; /* verde escuro */
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.card {
+  background: #fff;
+  border-left: 6px solid #ff6207;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+.btn {
+  background: #ff6207;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #d35005;
+}

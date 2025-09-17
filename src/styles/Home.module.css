@@ -22,7 +22,7 @@
 }
 
 .startButton {
-  background-color: #00c851;
+  background-color: #16a34a;
   border: none;
   padding: 15px 30px;
   border-radius: 10px;
@@ -34,5 +34,6 @@
 }
 
 .startButton:hover {
-  background-color: #007e33;
+  background-color: #15803d;
+  transform: scale(1.05);
 }
