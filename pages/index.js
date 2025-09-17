@@ -1,21 +1,16 @@
 import Link from "next/link";
-import "../styles/Home.css"; // Importa o CSS separado
+import styles from "../styles/Home.module.css"; // mesma lógica
+
 
 export default function Home() {
   return (
-    <div className="home-container">
-      <h1 className="home-title">🚀 CodeVenture</h1>
-      
-      <p className="home-description">
-        Bem-vindo ao mini game de programação! <br />
-        Complete os desafios de código para desbloquear novos níveis, 
-        começando por <span className="highlight-html">HTML</span>, depois 
-        <span className="highlight-css">CSS</span>, 
-        <span className="highlight-js">JavaScript</span> e muito mais.
+    <div className={styles.container}>
+      <h1 className={styles.title}>CodeVenture 🚀</h1>
+      <p className={styles.subtitle}>
+        Aprenda HTML, CSS e JavaScript jogando!
       </p>
-
-      <Link href="/stages/1">
-        <button className="start-button">🎮 Iniciar Jogo</button>
+      <Link href="/game">
+        <button className={styles.startButton}>Iniciar Jogo</button>
       </Link>
     </div>
   );
