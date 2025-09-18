@@ -7,7 +7,6 @@ export default function ExerciseCard({ data, onSuccess, styles }) {
   const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
-    // toda vez que o "data" mudar (novo exercício), reseta o estado
     setInput("");
     setFeedback(null);
     setCompleted(false);
@@ -29,12 +28,13 @@ export default function ExerciseCard({ data, onSuccess, styles }) {
 
   return (
     <div className={`${base.card} ${styles.card} ${completed ? base.completed : ""}`}>
+      {/* Lição rápida */}
       <h2 className={styles.title}>{data.lesson.title}</h2>
       <p>{data.lesson.text}</p>
       <pre className={base.example}>{data.lesson.example}</pre>
 
+      {/* Exercício */}
       <h3 style={{ marginTop: "15px" }}>{data.question}</h3>
-
       {!completed && (
         <>
           <textarea
@@ -54,6 +54,14 @@ export default function ExerciseCard({ data, onSuccess, styles }) {
         <p className={`${base.feedback} ${feedback.type === "success" ? styles.success : styles.error}`}>
           {feedback.message}
         </p>
+      )}
+
+      {/* 🔥 Box extra explicativa */}
+      {data.extra && (
+        <div className={base.extraBox}>
+          <h4>Explicação Didática</h4>
+          <p>{data.extra}</p>
+        </div>
       )}
     </div>
   );

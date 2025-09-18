@@ -1,14 +1,11 @@
-import "../src/styles/globals.css";
 import Head from "next/head";
+import "../src/styles/globals.css";
 
-export default function App({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-          rel="stylesheet"
-        />
+        <title>CodeVenture</title>
       </Head>
       <Component {...pageProps} />
     </>

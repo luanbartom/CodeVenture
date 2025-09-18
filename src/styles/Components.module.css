@@ -3,9 +3,30 @@
   border-radius: 12px;
   padding: 20px;
   margin: 20px auto;
-  max-width: 600px;
+  max-width: 700px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   text-align: left;
+}
+
+.extraBox {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f9fafb;
+  border-left: 5px solid #0ba541;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  text-align: left;
+}
+
+.extraBox h4 {
+  margin-bottom: 8px;
+  color: #0ba541;
+}
+
+.extraBox p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #333;
 }
 
 .textarea {
