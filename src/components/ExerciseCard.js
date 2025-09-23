@@ -1,19 +1,32 @@
 import { useState, useEffect } from "react";
-import base from "../styles/Components.module.css";
 
 export default function ExerciseCard({ data, onSuccess, styles }) {
   const [input, setInput] = useState("");
   const [feedback, setFeedback] = useState(null);
   const [completed, setCompleted] = useState(false);
 
+  // 🔥 Sempre que mudar de exercício, reseta o estado
   useEffect(() => {
     setInput("");
     setFeedback(null);
     setCompleted(false);
-  }, [data]);
+  }, [data.id]);
 
   const checkAnswer = () => {
-    if (input.trim() === data.answer.trim()) {
+    let isValid = false;
+
+    if (data.validator_pattern) {
+      try {
+        const regex = new RegExp(data.validator_pattern, "i");
+        isValid = regex.test(input.trim());
+      } catch (err) {
+        console.error("Erro regex:", err);
+      }
+    } else {
+      isValid = input.trim() === data.answer.trim();
+    }
+
+    if (isValid) {
       setFeedback({ type: "success", message: "✅ Correto!" });
       setCompleted(true);
       setTimeout(() => {
@@ -27,18 +40,17 @@ export default function ExerciseCard({ data, onSuccess, styles }) {
   };
 
   return (
-    <div className={`${base.card} ${styles.card} ${completed ? base.completed : ""}`}>
-      {/* Lição rápida */}
-      <h2 className={styles.title}>{data.lesson.title}</h2>
-      <p>{data.lesson.text}</p>
-      <pre className={base.example}>{data.lesson.example}</pre>
+    <div className={`${styles.card} ${completed ? styles.completed : ""}`}>
+      <h2>{data.title}</h2>
+      <p>{data.description}</p>
+      <pre className={styles.example}>{data.answer}</pre>
 
-      {/* Exercício */}
       <h3 style={{ marginTop: "15px" }}>{data.question}</h3>
+
       {!completed && (
         <>
           <textarea
-            className={base.textarea}
+            className={styles.textarea}
             rows="4"
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -51,17 +63,9 @@ export default function ExerciseCard({ data, onSuccess, styles }) {
       )}
 
       {feedback && (
-        <p className={`${base.feedback} ${feedback.type === "success" ? styles.success : styles.error}`}>
+        <p className={`${styles.feedback} ${styles[feedback.type]}`}>
           {feedback.message}
         </p>
-      )}
-
-      {/* 🔥 Box extra explicativa */}
-      {data.extra && (
-        <div className={base.extraBox}>
-          <h4>Explicação Didática</h4>
-          <p>{data.extra}</p>
-        </div>
       )}
     </div>
   );
