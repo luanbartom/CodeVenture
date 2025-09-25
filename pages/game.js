@@ -8,6 +8,7 @@ import reactStyles from "../src/styles/React.module.css";
 import ExerciseCard from "../src/components/ExerciseCard";
 import ProgressBar from "../src/components/ProgressBar";
 import CodeBubbles from "../src/components/CodeBubbles";
+import InfoCard from "../src/components/InfoCard";
 
 export default function Game() {
   const languages = ["html", "css", "js", "react"];
@@ -47,7 +48,10 @@ export default function Game() {
     } else {
       if (langIndex < languages.length - 1) {
         setLangIndex(langIndex + 1);
-        alert(`✅ Você concluiu ${language.toUpperCase()}! Vamos para ${languages[langIndex + 1].toUpperCase()} 🚀`);
+        alert(
+          `✅ Você concluiu ${language.toUpperCase()}! Vamos para ${languages[langIndex + 1].toUpperCase()
+          } 🚀`
+        );
       } else {
         alert("🎉 Parabéns! Você concluiu TODAS as linguagens!");
       }
@@ -59,13 +63,25 @@ export default function Game() {
   }
 
   return (
-    <div className={styles.container} style={{ position: "relative", overflow: "hidden" }}>
-      <CodeBubbles />
-      <div style={{ position: "relative", zIndex: 1 }}>
+    <div className={styles.container}>
+      <div className={styles.bg}>
+        <CodeBubbles />
+      </div>
+
+      <div className={styles.main}>
         <h1 className={styles.title}>Exercícios de {language.toUpperCase()}</h1>
         <ProgressBar value={progress} />
-        <ExerciseCard data={exercises[step]} onSuccess={handleSuccess} styles={styles} />
+        <ExerciseCard
+          data={exercises[step]}
+          onSuccess={handleSuccess}
+          styles={styles}
+          language={language} // 👈 adiciona isso
+        />
+
+        {/* 🔽 InfoCard vai aparecer sempre embaixo */}
+        <InfoCard language={language} styles={styles} />
       </div>
     </div>
   );
-}
+
+}  

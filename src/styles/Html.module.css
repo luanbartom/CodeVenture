@@ -1,34 +1,88 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  position: relative;
   min-height: 100vh;
   padding: 2rem;
-  background: linear-gradient(135deg, #fff5e6, #ffd9b3);
+  display: flex;
+  flex-direction: column;   /* 👈 coluna, não grid */
+  align-items: center;
+  gap: 2rem;
+  background: linear-gradient(135deg, #fff5e6, #e9a35c);
   font-family: Arial, sans-serif;
 }
 
-.title {
-  font-size: 2.2rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  color: #e67e22;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
 }
 
-.card {
+.main {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 760px; /* centraliza o conteúdo */
+}
+.editorWrapper {
+  border: 2px solid #e67e22;   /* cor do contorno */
+  border-radius: 8px;          /* cantos arredondados */
+  overflow: hidden;            /* corta o editor certinho */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* sombra */
+  margin-top: 1rem;
+}
+
+/* ----- SIDEBAR (INFOCARD) ----- */
+.infoCard {
+  background: #fff;
+  border-left: 6px solid #e67e22;
+  padding: 20px;
+  border-radius: 12px;
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  max-width: 760px;       /* mesma largura do exercício */
+  width: 100%;            /* ocupa a largura até o limite */
+  margin: 1rem auto;      /* centraliza horizontalmente */
+  
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;    /* garante quebra de linha */
+}
+
+.infoText {
+  white-space: pre-wrap;   /* mantém quebras do texto */
+  word-wrap: break-word;   /* quebra palavras longas */
+  overflow-wrap: break-word;
+  font-family: Arial, sans-serif; /* opcional */
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+
+/* ----- TIPOGRAFIA / CARD DO EXERCÍCIO ----- */
+.title{
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #e67e22;
+  text-shadow: 1px 1px 3px rgba(0,0,0,.2);
+  text-align: center;
+}
+
+.card{
   background: #fff;
   border-radius: 12px;
   padding: 20px;
-  max-width: 600px;
+  max-width: 760px;     /* não deixa ficar gigante demais */
+  min-width: 560px;     /* 👈 trava o mínimo no desktop */
   width: 100%;
   margin: 1rem 0;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,.1);
   border-left: 8px solid #e67e22;
 }
 
-.textarea {
+.textarea{
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -38,31 +92,33 @@
   margin-top: 10px;
 }
 
-.btn {
+.btn{
   margin-top: 10px;
   padding: 10px 20px;
   border: none;
   background: #e67e22;
-  color: white;
+  color: #fff;
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background .3s ease;
 }
+.btn:hover{ background: #cf711f; }
 
-.btn:hover {
-  background: #cf711f;
-}
+.feedback{ margin-top:10px; font-weight:700; }
+.success{ color: #198754; }
+.error{ color: #dc3545; }
 
-.feedback {
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-.success {
-  color: green;
-}
-
-.error {
-  color: red;
+/* ----- RESPONSIVO ----- */
+@media (max-width: 1200px){
+  .container{
+    grid-template-columns: 1fr;    /* InfoCard desce */
+  }
+  .card{
+    min-width: auto;               /* libera no mobile */
+    width: 100%;
+  }
+  .sidebar{
+    order: 2;
+  }
 }
