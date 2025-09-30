@@ -6,17 +6,83 @@ export default function ExerciseCard({ data, onSuccess, styles, language }) {
   const [feedback, setFeedback] = useState(null);
   const [completed, setCompleted] = useState(false);
 
-  // 🔄 reseta estado quando troca exercício
+  // reseta estado quando troca exercício
   useEffect(() => {
     setInput("");
     setFeedback(null);
     setCompleted(false);
   }, [data.id]);
 
+  const evaluateJsValidatorTests = () => {
+    if (language !== "js") {
+      return null;
+    }
+
+    const tests = Array.isArray(data.validator_tests)
+      ? data.validator_tests
+      : null;
+
+    if (!tests || tests.length === 0) {
+      return null;
+    }
+
+    let runtimeError = null;
+
+    try {
+      const runUserSubmission = new Function(
+        "inputNumero",
+        "console",
+        `"use strict"; let numero = inputNumero;\n${input}`
+      );
+
+      const allPassed = tests.every((test) => {
+        const logs = [];
+        const mockConsole = {
+          log: (...args) => {
+            logs.push(args.map((part) => String(part)).join(" "));
+          },
+        };
+
+        try {
+          runUserSubmission(test.numero, mockConsole);
+        } catch (error) {
+          runtimeError = error instanceof Error ? error.message : String(error);
+          return false;
+        }
+
+        if (typeof test.expectedRegex === "string") {
+          const regex = new RegExp(test.expectedRegex, "i");
+          return logs.some((entry) => regex.test(entry));
+        }
+
+        if (Array.isArray(test.expectedLogs) && test.expectedLogs.length > 0) {
+          return test.expectedLogs.every((expected) =>
+            logs.some((entry) =>
+              entry.toLowerCase().includes(String(expected).toLowerCase())
+            )
+          );
+        }
+
+        return false;
+      });
+
+      return { isValid: allPassed, runtimeError };
+    } catch (error) {
+      runtimeError = error instanceof Error ? error.message : String(error);
+      return { isValid: false, runtimeError };
+    }
+  };
+
   const checkAnswer = () => {
     let isValid = false;
+    let runtimeErrorMessage = null;
 
-    if (data.validator_pattern) {
+    const jsValidation = evaluateJsValidatorTests();
+
+    if (jsValidation !== null) {
+      isValid = jsValidation.isValid;
+      runtimeErrorMessage = jsValidation.runtimeError;
+    } else if (data.validator_pattern) {
       try {
         const regex = new RegExp(data.validator_pattern, "i");
         isValid = regex.test(input.trim());
@@ -24,11 +90,11 @@ export default function ExerciseCard({ data, onSuccess, styles, language }) {
         console.error("Erro regex:", err);
       }
     } else {
-      isValid = input.trim() === data.answer.trim();
+      isValid = input.trim() === (data.answer || "").trim();
     }
 
     if (isValid) {
-      setFeedback({ type: "success", message: "✅ Correto!" });
+      setFeedback({ type: "success", message: "Correto!" });
       setCompleted(true);
       setTimeout(() => {
         setFeedback(null);
@@ -36,11 +102,14 @@ export default function ExerciseCard({ data, onSuccess, styles, language }) {
         onSuccess();
       }, 1000);
     } else {
-      setFeedback({ type: "error", message: "❌ Tente novamente!" });
+      const errorMessage = runtimeErrorMessage
+        ? `Ops! Erro ao executar seu código: ${runtimeErrorMessage}`
+        : "Tente novamente!";
+      setFeedback({ type: "error", message: errorMessage });
     }
   };
 
-  // 🔥 Monta preview dependendo da linguagem
+  // Monta preview dependendo da linguagem
   let previewContent = "";
 
   if (language === "html") {
@@ -115,7 +184,7 @@ export default function ExerciseCard({ data, onSuccess, styles, language }) {
                 lineHeight: "1.5",
               }}
             >
-              <h4>📘 Saiba mais</h4>
+              <h4>Saiba mais</h4>
               <p>{data.extra}</p>
             </div>
           )}

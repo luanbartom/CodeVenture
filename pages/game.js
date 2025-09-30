@@ -27,6 +27,13 @@ const credits = [
   },
 ];
 
+const languageLabels = {
+  html: "HTML",
+  css: "CSS",
+  js: "JavaScript",
+  react: "React",
+};
+
 export default function Game() {
   const languages = ["html", "css", "js", "react"];
 
@@ -48,13 +55,15 @@ export default function Game() {
   const [step, setStep] = useState(0);
   const [progress, setProgress] = useState(0);
   const [finished, setFinished] = useState(false);
+  const [transitionData, setTransitionData] = useState(null);
 
   const language = languages[langIndex];
   const exercises = exercisesByLang[language];
   const styles = stylesByLang[language];
+  const currentLabel = languageLabels[language] ?? language.toUpperCase();
 
   const handleSuccess = () => {
-    if (finished) {
+    if (finished || transitionData) {
       return;
     }
 
@@ -63,25 +72,36 @@ export default function Game() {
       setStep(next);
       setProgress(((next + 1) / exercises.length) * 100);
     } else {
-      // Garante que a barra vá a 100% no último exercício da linguagem atual
+      // Garante que a barra vai a 100% no ultimo exercicio da linguagem atual
       setProgress(100);
 
       if (langIndex < languages.length - 1) {
-        setTimeout(() => {
-          setLangIndex(langIndex + 1);
-          setStep(0);
-          setProgress(0);
-          alert(
-            `✅ Você concluiu ${language.toUpperCase()}! Vamos para ${languages[
-              langIndex + 1
-            ].toUpperCase()} 🚀`
-          );
-        }, 500);
+        setTransitionData({
+          current: language,
+          next: languages[langIndex + 1],
+        });
       } else {
         setFinished(true);
       }
     }
   };
+
+  const handleTransitionContinue = () => {
+    if (!transitionData) {
+      return;
+    }
+
+    const nextIndex = langIndex + 1;
+
+    setTransitionData(null);
+    setLangIndex(nextIndex);
+    setStep(0);
+    setProgress(0);
+  };
+
+  const nextLabel = transitionData
+    ? languageLabels[transitionData.next] ?? transitionData.next.toUpperCase()
+    : null;
 
   return (
     <div
@@ -92,14 +112,14 @@ export default function Game() {
       <div style={{ position: "relative", zIndex: 1 }}>
         <h1 className={styles.title}>
           {finished
-            ? "Você concluiu o CodeVenture!"
-            : `Exercícios de ${language.toUpperCase()}`}
+            ? "Vocêa concluiu o CodeVenture!"
+            : `Exercícios de ${currentLabel}`}
         </h1>
         <ProgressBar value={progress} />
         {finished ? (
           <div className={`${styles.card} ${styles.finalCard}`}>
             <h2 className={styles.finalHeading}>
-              Parabéns! Você finalizou todas as linguagens.
+              Parabéns! Vocêa finalizou todas as linguagens.
             </h2>
             <p className={styles.finalSubtitle}>Projeto desenvolvido por:</p>
             <div className={styles.finalLinks}>
@@ -132,6 +152,32 @@ export default function Game() {
           </div>
         )}
       </div>
+      {transitionData && (
+        <div
+          className={styles.transitionOverlay}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="transition-title"
+        >
+          <div className={styles.transitionCard}>
+            <h2 id="transition-title" className={styles.transitionHeading}>
+              Você concluiu {languageLabels[transitionData.current] ??
+                transitionData.current.toUpperCase()}!
+            </h2>
+            <p className={styles.transitionMessage}>
+              Excelente trabalho. Agora vamos colocar em prática o próximo
+              desafio em {nextLabel}.
+            </p>
+            <button
+              type="button"
+              className={styles.transitionButton}
+              onClick={handleTransitionContinue}
+            >
+              Seguir para {nextLabel}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

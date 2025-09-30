@@ -163,6 +163,85 @@
   text-decoration: underline;
   transform: translateY(-1px);
 }
+
+.transitionOverlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(51, 12, 85, 0.55);
+  backdrop-filter: blur(2px);
+  z-index: 99;
+  animation: overlayFade 0.3s ease forwards;
+}
+
+.transitionCard {
+  background: #faf0ff;
+  border-radius: 16px;
+  padding: 2rem;
+  width: min(90%, 420px);
+  text-align: center;
+  border-top: 8px solid #9925eb;
+  box-shadow: 0 25px 45px rgba(94, 15, 150, 0.25);
+  transform: translateY(18px) scale(0.96);
+  opacity: 0;
+  animation: cardSlide 0.35s ease forwards;
+}
+
+.transitionHeading {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #9925eb;
+  margin-bottom: 0.5rem;
+}
+
+.transitionMessage {
+  margin-bottom: 1.75rem;
+  color: #431569;
+  line-height: 1.6;
+}
+
+.transitionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  background: linear-gradient(135deg, #9925eb, #af59f2);
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.transitionButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px rgba(94, 15, 150, 0.25);
+}
+
+@keyframes overlayFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cardSlide {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 @media (max-width: 1100px) {
   .layout {
     grid-template-columns: minmax(190px, 280px) minmax(0, 1fr) minmax(190px, 280px);
