@@ -29,8 +29,8 @@ const cssExercises = [
       example: "p { font-size: 50px; }",
     },
     question: "Defina o tamanho da fonte do parágrafo como '16px'.",
-    answer: "p { font-size: 20px; }",
-    validator_pattern: "p\\s*\\{[^}]*font-size\\s*:\\s*20px;?[^}]*\\}",
+    answer: "p { font-size: 16px; }",
+    validator_pattern: "p\\s*\\{[^}]*font-size\\s*:\\s*16px;?[^}]*\\}",
   },
   {
     id: 4,

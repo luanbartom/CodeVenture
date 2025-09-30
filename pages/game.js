@@ -16,6 +16,17 @@ import ProgressBar from "../src/components/ProgressBar";
 import CodeBubbles from "../src/components/CodeBubbles";
 import InfoCard from "../src/components/InfoCard";
 
+const credits = [
+  {
+    name: "Luan Bartom Silva e Silva",
+    github: "https://github.com/luanbartom",
+  },
+  {
+    name: "Ivan Lucas Miorandi",
+    github: "https://github.com/ivanlucasmiorandi",
+  },
+];
+
 export default function Game() {
   const languages = ["html", "css", "js", "react"];
 
@@ -36,18 +47,23 @@ export default function Game() {
   const [langIndex, setLangIndex] = useState(0);
   const [step, setStep] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [finished, setFinished] = useState(false);
 
   const language = languages[langIndex];
   const exercises = exercisesByLang[language];
   const styles = stylesByLang[language];
 
   const handleSuccess = () => {
+    if (finished) {
+      return;
+    }
+
     if (step < exercises.length - 1) {
       const next = step + 1;
       setStep(next);
       setProgress(((next + 1) / exercises.length) * 100);
     } else {
-      // 👉 Garante que a barra vá a 100% no último exercício
+      // Garante que a barra vá a 100% no último exercício da linguagem atual
       setProgress(100);
 
       if (langIndex < languages.length - 1) {
@@ -62,7 +78,7 @@ export default function Game() {
           );
         }, 500);
       } else {
-        alert("🎉 Parabéns! Você concluiu TODAS as linguagens!");
+        setFinished(true);
       }
     }
   };
@@ -75,16 +91,46 @@ export default function Game() {
       <CodeBubbles />
       <div style={{ position: "relative", zIndex: 1 }}>
         <h1 className={styles.title}>
-          Exercícios de {language.toUpperCase()}
+          {finished
+            ? "Você concluiu o CodeVenture!"
+            : `Exercícios de ${language.toUpperCase()}`}
         </h1>
         <ProgressBar value={progress} />
-        <ExerciseCard
-          data={exercises[step]}
-          onSuccess={handleSuccess}
-          styles={styles}
-          language={language}
-        />
-        <InfoCard language={language} styles={styles} />
+        {finished ? (
+          <div className={`${styles.card} ${styles.finalCard}`}>
+            <h2 className={styles.finalHeading}>
+              Parabéns! Você finalizou todas as linguagens.
+            </h2>
+            <p className={styles.finalSubtitle}>Projeto desenvolvido por:</p>
+            <div className={styles.finalLinks}>
+              {credits.map((person) => (
+                <a
+                  key={person.github}
+                  href={person.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {person.name}
+                </a>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className={styles.layout}>
+            <div className={styles.cardWrapper}>
+              <ExerciseCard
+                data={exercises[step]}
+                onSuccess={handleSuccess}
+                styles={styles}
+                language={language}
+              />
+            </div>
+            <div className={styles.infoSlot}>
+              <InfoCard language={language} styles={styles} />
+            </div>
+            <div className={styles.spacer} aria-hidden="true" />
+          </div>
+        )}
       </div>
     </div>
   );

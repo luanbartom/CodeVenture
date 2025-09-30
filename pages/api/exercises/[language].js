@@ -1,20 +1,28 @@
-import { db } from "../../../src/lib/db"; // conexão MySQL (mysql2/promise)
+﻿import htmlExercises from "../../../src/data/htmlExercises";
+import cssExercises from "../../../src/data/cssExercises";
+import jsExercises from "../../../src/data/jsExercises";
+import reactExercises from "../../../src/data/reactExercises";
 
-export default async function handler(req, res) {
+const dataByLanguage = {
+  html: htmlExercises,
+  css: cssExercises,
+  js: jsExercises,
+  react: reactExercises,
+};
+
+export default function handler(req, res) {
   const { language } = req.query;
 
-  try {
-    if (req.method === "GET") {
-      const [rows] = await db.query(
-        "SELECT id, language, title, description, question, answer, validator_pattern FROM exercises WHERE language = ? ORDER BY id ASC",
-        [language]
-      );
-      return res.status(200).json(rows);
-    }
-
+  if (req.method !== "GET") {
     return res.status(405).json({ error: "Método não permitido" });
-  } catch (err) {
-    console.error("Erro ao buscar exercícios:", err);
-    return res.status(500).json({ error: "Erro interno no servidor" });
   }
+
+  const normalized = String(language || "").toLowerCase();
+  const payload = dataByLanguage[normalized];
+
+  if (!payload) {
+    return res.status(404).json({ error: "Linguagem não encontrada" });
+  }
+
+  return res.status(200).json(payload);
 }

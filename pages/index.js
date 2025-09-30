@@ -1,5 +1,6 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import Head from "next/head";
+import Image from "next/image";
 import styles from "../src/styles/Home.module.css";
 
 export default function Home() {
@@ -21,7 +22,14 @@ export default function Home() {
 
       {/* Conteúdo central */}
       <div className={styles.heroBox}>
-        <img src="/logo.png" alt="CodeVenture" className={styles.logo} />
+        <Image
+          src="/logo.png"
+          alt="CodeVenture"
+          width={220}
+          height={220}
+          className={styles.logo}
+          priority
+        />
         <p className={styles.subtitle}>
           Aprenda HTML, CSS, JavaScript e React passo a passo, em uma jornada interativa.
         </p>
