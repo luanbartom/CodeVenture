@@ -3,7 +3,7 @@
   min-height: 100vh;
   padding: 2rem;
   display: flex;
-  flex-direction: column;   /* 👈 coluna, não grid */
+  flex-direction: column;
   align-items: center;
   gap: 2rem;
   background: linear-gradient(135deg, #fff5e6, #e9a35c);
@@ -21,78 +21,56 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 760px; /* centraliza o conteúdo */
-}
-.editorWrapper {
-  border: 2px solid #e67e22;   /* cor do contorno */
-  border-radius: 8px;          /* cantos arredondados */
-  overflow: hidden;            /* corta o editor certinho */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* sombra */
-  margin-top: 1rem;
+  max-width: 760px;
 }
 
-/* ----- SIDEBAR (INFOCARD) ----- */
+/* Editor reduzido */
+.editorWrapper {
+  border: 2px solid #e67e22;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  margin-top: 1rem;
+  height: 150px;
+  max-height: 150px;
+}
+
+/* Preview reduzido */
+.preview {
+  margin-top: 1rem;
+  width: 100%;
+  height: 100px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+}
+
+/* ----- CARDS ----- */
+.card,
 .infoCard {
   background: #fff;
   border-left: 6px solid #e67e22;
-  padding: 20px;
   border-radius: 12px;
+  padding: 20px;
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.6;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
-  max-width: 760px;       /* mesma largura do exercício */
-  width: 100%;            /* ocupa a largura até o limite */
-  margin: 1rem auto;      /* centraliza horizontalmente */
-  
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;    /* garante quebra de linha */
+  max-width: 700px;   /* 👈 largura travada */
+  width: 100%;
+  margin: 1rem auto;
 }
 
-.infoText {
-  white-space: pre-wrap;   /* mantém quebras do texto */
-  word-wrap: break-word;   /* quebra palavras longas */
-  overflow-wrap: break-word;
-  font-family: Arial, sans-serif; /* opcional */
-  font-size: 1rem;
-  line-height: 1.5;
-}
-
-
-/* ----- TIPOGRAFIA / CARD DO EXERCÍCIO ----- */
-.title{
+.title {
   font-size: 2.2rem;
   font-weight: 800;
-  margin-bottom: 1rem;
   color: #e67e22;
-  text-shadow: 1px 1px 3px rgba(0,0,0,.2);
+  text-shadow: #96490f 1px 1px 2px;
   text-align: center;
 }
 
-.card{
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  max-width: 760px;     /* não deixa ficar gigante demais */
-  min-width: 560px;     /* 👈 trava o mínimo no desktop */
-  width: 100%;
-  margin: 1rem 0;
-  box-shadow: 0 4px 12px rgba(0,0,0,.1);
-  border-left: 8px solid #e67e22;
-}
-
-.textarea{
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-family: monospace;
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-.btn{
+/* Botão */
+.btn {
   margin-top: 10px;
   padding: 10px 20px;
   border: none;
@@ -101,24 +79,31 @@
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
-  transition: background .3s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
-.btn:hover{ background: #cf711f; }
 
-.feedback{ margin-top:10px; font-weight:700; }
-.success{ color: #198754; }
-.error{ color: #dc3545; }
+.btn:hover {
+  background: #cf711f;
+  transform: scale(1.03);
+}
 
-/* ----- RESPONSIVO ----- */
-@media (max-width: 1200px){
-  .container{
-    grid-template-columns: 1fr;    /* InfoCard desce */
-  }
-  .card{
-    min-width: auto;               /* libera no mobile */
-    width: 100%;
-  }
-  .sidebar{
-    order: 2;
+/* Feedback */
+.feedback {
+  margin-top: 10px;
+  font-weight: 700;
+}
+.success {
+  color: #198754;
+}
+.error {
+  color: #dc3545;
+}
+
+/* Responsivo */
+@media (max-width: 1200px) {
+  .card,
+  .infoCard {
+    width: 95%;
+    min-width: auto;
   }
 }

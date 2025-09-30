@@ -1,5 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
+import htmlExercises from "../src/data/htmlExercises";
+import cssExercises from "../src/data/cssExercises";
+import jsExercises from "../src/data/jsExercises";
+import reactExercises from "../src/data/reactExercises";
+
+// importa estilos
 import htmlStyles from "../src/styles/Html.module.css";
 import cssStyles from "../src/styles/Css.module.css";
 import jsStyles from "../src/styles/Js.module.css";
@@ -13,6 +19,13 @@ import InfoCard from "../src/components/InfoCard";
 export default function Game() {
   const languages = ["html", "css", "js", "react"];
 
+  const exercisesByLang = {
+    html: htmlExercises,
+    css: cssExercises,
+    js: jsExercises,
+    react: reactExercises,
+  };
+
   const stylesByLang = {
     html: htmlStyles,
     css: cssStyles,
@@ -21,24 +34,12 @@ export default function Game() {
   };
 
   const [langIndex, setLangIndex] = useState(0);
-  const [exercises, setExercises] = useState([]);
   const [step, setStep] = useState(0);
   const [progress, setProgress] = useState(0);
 
   const language = languages[langIndex];
+  const exercises = exercisesByLang[language];
   const styles = stylesByLang[language];
-
-  // Buscar exercícios do banco
-  useEffect(() => {
-    async function load() {
-      const res = await fetch(`/api/exercises/${language}`);
-      const data = await res.json();
-      setExercises(data);
-      setStep(0);
-      setProgress(0);
-    }
-    load();
-  }, [language]);
 
   const handleSuccess = () => {
     if (step < exercises.length - 1) {
@@ -46,42 +47,45 @@ export default function Game() {
       setStep(next);
       setProgress(((next + 1) / exercises.length) * 100);
     } else {
+      // 👉 Garante que a barra vá a 100% no último exercício
+      setProgress(100);
+
       if (langIndex < languages.length - 1) {
-        setLangIndex(langIndex + 1);
-        alert(
-          `✅ Você concluiu ${language.toUpperCase()}! Vamos para ${languages[langIndex + 1].toUpperCase()
-          } 🚀`
-        );
+        setTimeout(() => {
+          setLangIndex(langIndex + 1);
+          setStep(0);
+          setProgress(0);
+          alert(
+            `✅ Você concluiu ${language.toUpperCase()}! Vamos para ${languages[
+              langIndex + 1
+            ].toUpperCase()} 🚀`
+          );
+        }, 500);
       } else {
         alert("🎉 Parabéns! Você concluiu TODAS as linguagens!");
       }
     }
   };
 
-  if (!exercises.length) {
-    return <p style={{ textAlign: "center" }}>Carregando exercícios...</p>;
-  }
-
   return (
-    <div className={styles.container}>
-      <div className={styles.bg}>
-        <CodeBubbles />
-      </div>
-
-      <div className={styles.main}>
-        <h1 className={styles.title}>Exercícios de {language.toUpperCase()}</h1>
+    <div
+      className={styles.container}
+      style={{ position: "relative", overflow: "hidden" }}
+    >
+      <CodeBubbles />
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <h1 className={styles.title}>
+          Exercícios de {language.toUpperCase()}
+        </h1>
         <ProgressBar value={progress} />
         <ExerciseCard
           data={exercises[step]}
           onSuccess={handleSuccess}
           styles={styles}
-          language={language} // 👈 adiciona isso
+          language={language}
         />
-
-        {/* 🔽 InfoCard vai aparecer sempre embaixo */}
         <InfoCard language={language} styles={styles} />
       </div>
     </div>
   );
-
-}  
+}
