@@ -78,6 +78,7 @@
   width: 280px;
   max-width: 80%;
   margin-bottom: 1rem;
+  box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.748);
 }
 
 .logo:hover {

@@ -9,6 +9,9 @@ export default function CodeBubbles() {
       <div className={styles.codeBubble} style={{ left: "60%", animationDuration: "14s" }}>{"if (true) {}"}</div>
       <div className={styles.codeBubble} style={{ left: "75%", animationDuration: "20s" }}>{"<div>"}</div>
       <div className={styles.codeBubble} style={{ left: "90%", animationDuration: "16s" }}>{"function()"}</div>
+      <div className={styles.codeBubble} style={{ left: "90%", animationDuration: "16s" }}>{"[Desenvolvedores: LUAN BARTOM e IVAN LUCAS]"}</div>
+      <div className={styles.codeBubble} style={{ left: "90%", animationDuration: "8s" }}>{"[Desenvolvedores: LUAN BARTOM e IVAN LUCAS]"}</div>
+      <div className={styles.codeBubble} style={{ left: "90%", animationDuration: "10s" }}>{"[Desenvolvedores: LUAN BARTOM e IVAN LUCAS]"}</div>
     </div>
   );
 }
